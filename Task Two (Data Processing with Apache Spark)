@@ -1,0 +1,31 @@
+# Install Java
+!apt-get install openjdk-8-jdk-headless -qq > /dev/null
+
+# Install PySpark
+!pip install pyspark
+
+
+import os
+os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-8-openjdk-amd64"
+os.environ["SPARK_HOME"] = "/usr/local/lib/python3.10/dist-packages/pyspark" # Changed from python3.7 to python3.10
+
+from pyspark.sql import SparkSession
+
+# Create a Spark session
+spark = SparkSession.builder \
+    .appName("Google Colab PySpark") \
+    .getOrCreate()
+
+# Check the Spark version
+print(spark.version)
+
+
+# Load CSV data (make sure to upload your CSV file to Colab)
+df = spark.read.csv("/content/iris.csv", header=True, inferSchema=True)
+
+# Show the data
+df.show()
+
+# Perform some analysis (e.g., count the number of records)
+record_count = df.count()
+print(f"Number of records: {record_count}")
